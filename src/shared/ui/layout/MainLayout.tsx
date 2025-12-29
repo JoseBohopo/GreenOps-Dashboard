@@ -1,0 +1,21 @@
+import React from 'react'
+import { Sidebar } from './Sidebar';
+import { Header } from './Header';
+
+interface MainLayoutProps {
+    children: React.ReactNode;
+}
+
+export const MainLayout: React.FC<MainLayoutProps> = ({children}) => {
+  return (
+    <div className='flex flex-col  overflow-hidden'>
+        <Header />
+        <div className='flex h-screen flex-1'>
+            <Sidebar />
+            <main className='flex-1 overflow-auto p-6 bg-gray-50'>
+                {children}
+            </main>
+        </div>
+    </div>
+  )
+}
