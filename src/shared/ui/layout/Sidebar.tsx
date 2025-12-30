@@ -1,6 +1,8 @@
-export function Sidebar() {
+import React from 'react'
+
+export const Sidebar = () => {
   return (
-    <aside className="bg-gray-800 text-white w-64 min-h-screen p-4">
+        <aside className="bg-gray-800 text-white w-64 min-h-screen p-4">
       <div className="mb-8">
         <h2 className="text-xl font-bold mb-4">GreenOps</h2>
       </div>
@@ -18,5 +20,5 @@ export function Sidebar() {
         </ul>
       </nav>
     </aside>
-  );
+  )
 }
