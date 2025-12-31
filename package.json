@@ -29,8 +29,10 @@
     "@vitest/ui": "^4.0.16",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
+    "jsdom": "^27.4.0",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vitest": "^4.0.16"
+    "vitest": "^4.0.16",
+    "worker-loader": "^3.0.8"
   }
 }
