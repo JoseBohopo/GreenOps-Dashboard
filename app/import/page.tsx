@@ -3,7 +3,7 @@ import { CsvUploader } from '@/src/features/data-import/ui/CsvUploader'
 
 const ImportPage = () => {
   return (
-    <div>
+    <div className="flex flex-col justify-around items-center p-4 min-h-[50dvh] shadow-md bg-white rounded-lg">
       <h1 className="text-3xl font-bold mb-6 text-gray-800">
         Import Data
       </h1>
@@ -14,4 +14,5 @@ const ImportPage = () => {
     </div>
   )
 }
-export default ImportPage;
+
+export default ImportPage
