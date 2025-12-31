@@ -1,6 +1,6 @@
 'use client'
 import React, { useRef, useState } from 'react'
-import { useUsageDataStore } from '../aplication/useUsageDataStore'
+import { useUsageDataStore } from '../application/useUsageDataStore'
 
 export const CsvUploader = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
