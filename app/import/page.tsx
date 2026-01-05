@@ -1,9 +1,8 @@
-import React from 'react'
 import { CsvUploader } from '@/src/features/data-import/ui/CsvUploader'
 
 const ImportPage = () => {
   return (
-    <div className="flex flex-col justify-around items-center p-4 min-h-[50dvh] shadow-md bg-white rounded-lg">
+    <div className="flex flex-col justify-around items-center p-2 md:p-4 min-h-[50dvh] shadow-md bg-white rounded-lg">
       <h1 className="text-3xl font-bold mb-6 text-gray-800">
         Import Data
       </h1>

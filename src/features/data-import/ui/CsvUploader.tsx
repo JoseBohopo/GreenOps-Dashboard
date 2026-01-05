@@ -68,7 +68,7 @@ export const CsvUploader = () => {
   }
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+    <div className="max-w-xs md:max-w-md mx-auto p-4 sm:p-6 lg:p-8 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-4 text-gray-800">
         Load Usage Data CSV
       </h2>
@@ -96,7 +96,7 @@ export const CsvUploader = () => {
             hover:bg-gray-50 hover:border-gray-400
             focus:outline-none focus:ring-2 focus:ring-blue-500
             disabled:opacity-50 disabled:cursor-not-allowed
-            transition-colors"
+            transition-colors overflow-hidden text-ellipsis whitespace-nowrap"
         >
           {selectedFile ? selectedFile.name : 'Choose CSV file...'}
         </button>
@@ -108,16 +108,23 @@ export const CsvUploader = () => {
         </div>
       )}
 
-      {selectedFile && !fileError && !error && !parseDetails && (
-        <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-md">
-          <p className="text-sm text-green-700">
-            ✓ Selected file: <strong>{selectedFile.name}</strong>
-          </p>
-          <p className="text-xs text-green-600 mt-1">
-            Size: {(selectedFile.size / 1024).toFixed(2)} KB
-          </p>
-        </div>
-      )}
+        {selectedFile && !fileError && !error && !parseDetails && (
+          <div className="mb-4 p-3 sm:p-4 bg-green-50 border border-green-200 rounded-lg">
+            <div className="flex items-start gap-2">
+              <svg className="w-5 h-5 text-green-600 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-green-700 overflow-hidden text-ellipsis whitespace-nowrap font-medium">
+                  Selected: <span className="font-normal wrap-break-words">{selectedFile.name}</span>
+                </p>
+                <p className="text-xs text-green-600 mt-1">
+                  Size: {(selectedFile.size / 1024).toFixed(2)} KB
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
       {error && parseDetails && (
         <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
@@ -131,16 +138,23 @@ export const CsvUploader = () => {
       )}
 
       {!error && parseDetails && (
-        <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-md">
-          <p className="text-sm font-semibold text-green-700">
-            ✓ File parsed successfully:
-          </p>
-          {parseDetails.map((detail, index) => (
-            <p key={index} className="text-xs text-green-600 mt-1">
-              {detail}
-            </p>
-          ))}
-        </div>
+          <div className="mb-4 p-3 sm:p-4 bg-green-50 border border-green-200 rounded-lg">
+            <div className="flex items-start gap-2">
+              <svg className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <div>
+                <p className="text-sm font-semibold text-green-700">
+                  ✓ File parsed successfully
+                </p>
+                {parseDetails.map((detail, index) => (
+                  <p key={index} className="text-xs sm:text-sm text-green-600 mt-1">
+                    {detail}
+                  </p>
+                ))}
+              </div>
+            </div>
+          </div>
       )}
 
       <button
