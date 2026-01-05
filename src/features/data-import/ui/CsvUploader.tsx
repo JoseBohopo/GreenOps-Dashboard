@@ -1,6 +1,9 @@
 'use client'
 import React, { useRef, useState } from 'react'
 import { useUsageDataStore } from '../application/useUsageDataStore'
+import { useCsvWorker } from '../application/useCsvWorker'
+
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 export const CsvUploader = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -8,17 +11,24 @@ export const CsvUploader = () => {
   const [parseDetails, setParseDetails] = useState<string[] | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const { isLoading, uploadAndParseCsv, error } = useUsageDataStore()
+  const { isLoading, error, setLoading, clearData, setParseResult } =
+    useUsageDataStore()
+  const { parseFile } = useCsvWorker()
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     setFileError(null)
-    useUsageDataStore.getState().clearData()
+    clearData()
     setParseDetails(null)
 
     if (!file) {
       setSelectedFile(null)
       return
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+        setFileError('File size exceeds the maximum limit of 10MB.');
+        return;
     }
 
     if (file?.type === 'text/csv') {
@@ -33,13 +43,23 @@ export const CsvUploader = () => {
   const handleUpload = async () => {
     if (!selectedFile) return
 
-    const result = await uploadAndParseCsv(selectedFile)
-    if (result.success) {
-      setParseDetails([`Successfully parsed ${result.rowCount} rows.`])
-      setSelectedFile(null)
-    } else {
-      setParseDetails(result.details || null)
-      console.error('Parsing error:', result.error)
+    setLoading(true)
+
+    try {
+      const result = await parseFile(selectedFile)
+      setParseResult(result)
+      if (result.success) {
+        setLoading(false)
+        setParseDetails([`Successfully parsed ${result.rowCount} rows.`])
+        setSelectedFile(null)
+      } else {
+        setParseDetails(result.details || null)
+        console.error('Parsing error:', result.error)
+      }
+    } catch (err) {
+      setFileError('An error occurred while parsing the file.')
+      console.error('Unexpected error:', err)
+      setLoading(false)
     }
   }
 
@@ -54,7 +74,7 @@ export const CsvUploader = () => {
       </h2>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label aria-label='Select Csv File' className="block text-sm font-medium text-gray-700 mb-2">
           Select CSV File
         </label>
         <input

@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { UsageDataRow, ParseResult, UsageDataState } from '../domain/types';
-import { parseCsv } from '../infrastructure/csvParser';
 
 export const useUsageDataStore = create<UsageDataState>()(
     devtools(
@@ -12,38 +11,38 @@ export const useUsageDataStore = create<UsageDataState>()(
                 error: null,
                 lastUploadDate: null,
 
-                uploadAndParseCsv: async (file: File) => {
-                    set({ isLoading: true, error: null }, false, 'uploadAndParseCsv/start');
+                setLoading: (isLoading: boolean) => {
+                    set({ isLoading }, false, isLoading ? 'parse/start' : 'parse/end');
+                },
 
-                    try {
-                        const result: ParseResult<UsageDataRow> = await parseCsv(file);
-
-                        if (result.success) {
-                            set({
-                                usageData: result?.data,
-                                error: null,
+                setParseResult: (result: ParseResult<UsageDataRow>) => {
+                    if (result.success) {
+                        set(
+                            {
+                                usageData: result.data,
                                 lastUploadDate: new Date().toISOString(),
+                                error: null,
                                 isLoading: false,
-                            }, false, 'uploadAndParseCsv/success');
-                        } else {
-                            set({ usageData: null, error: result.error, isLoading: false }, false, 'uploadAndParseCsv/failure');
-                        }
-
-                        return result;
-                    } catch (error) {
-                        const errorResult: ParseResult<UsageDataRow> = {
-                            success: false,
-                            error: 'Unexpected error during parsing',
-                            details: [error instanceof Error ? error.message : 'Unknown error'],
-                        };
-
-                        set({ usageData: null, error: errorResult.error, isLoading: false }, false, 'uploadAndParseCsv/error');
-                        return errorResult;
+                            },
+                            false,
+                            'parse/success'
+                        );
+                    } else {
+                        set(
+                            {
+                                usageData: null,
+                                error: result.error,
+                                isLoading: false,
+                            },
+                            false,
+                            'parse/failure'
+                        );
                     }
                 },
 
-                clearData: () => set({ usageData: null, lastUploadDate: null, error: null }),
-                setData: (data: UsageDataRow[]) => set({ usageData: data }),
+                clearData: () =>
+                    set({ usageData: null, lastUploadDate: null, error: null }, false, 'data/clear'),
+                setData: (data: UsageDataRow[]) => set({ usageData: data }, false, 'data/set'),
             }),
             {
                 name: 'usage-data-storage',

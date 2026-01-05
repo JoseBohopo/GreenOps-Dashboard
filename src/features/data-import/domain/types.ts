@@ -37,7 +37,8 @@ export interface UsageDataState {
     error: string | null;
     lastUploadDate: string | null;
 
-    uploadAndParseCsv: (file: File) => Promise<ParseResult<UsageDataRow>>;
+    setParseResult: (result: ParseResult<UsageDataRow>) => void;
     clearData: () => void;
+    setLoading: (isLoading: boolean) => void;
     setData: (data: UsageDataRow[]) => void;
 }
