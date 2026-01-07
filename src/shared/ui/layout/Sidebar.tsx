@@ -1,9 +1,8 @@
-interface SidebarProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import { useSidebar } from "../../store/useSidebar";
 
-export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+
+export const Sidebar: React.FC = () => {
+  const { isOpen, toggleSideBar } = useSidebar();
   return (
     <aside
       className={`
@@ -18,7 +17,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       <div className="flex items-center justify-between p-4 border-b border-gray-700">
         <h2 className="text-xl font-bold">GreenOps</h2>
         <button
-          onClick={onClose}
+          onClick={toggleSideBar}
           className="lg:hidden p-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           aria-label="Close menu"
         >
