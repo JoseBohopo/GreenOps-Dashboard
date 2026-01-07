@@ -8,11 +8,6 @@
 
 1. [Layout Architecture](#layout-architecture)
 2. [Main Components](#main-components)
-3. [Responsive System](#responsive-system)
-4. [State Management](#state-management)
-5. [Accessibility](#accessibility)
-6. [Usage Guide](#usage-guide)
-7. [Technical Considerations](#technical-considerations)
 
 ---
 
@@ -44,7 +39,7 @@
 - Defines global metadata
 - Applies Css font variables
 
-2. ### [MainLayout](#src/shared/ui/layout/MainLayout.tsx)
+### 2. [MainLayout](#src/shared/ui/layout/MainLayout.tsx)
 
 **Responsibility**: Main layout orchestrator. Manages sidebar state and composes Header + Sidebar + Main.
 
@@ -55,16 +50,11 @@ interface MainLayoutProps {
 }
 ```
 
-**Internal State:
-```tsx
-const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-```
-
 **Features**:
 - Client Component('use client')
 - Vertical flex layout (column)
 
-3. ### [Header](#src/shared/ui/layout/Header.tsx)
+### 3. [Header](#src/shared/ui/layout/Header.tsx)
 
 **Responsibility**: Top bar with logo, hamburger menu(mobile), and user info.
 
@@ -75,7 +65,7 @@ const [isSideBarOpen, setIsSideBarOpen] = useState(false);
 - User placeholder (right side)
 - Shadow and border for visual separation
 
-4. ### [Sidebar](#src/shared/ui/layout/Sidebar.tsx)
+### 4.  [Sidebar](#src/shared/ui/layout/Sidebar.tsx)
 
 **Responsibility**: Side navigation with responsive behavior.
 
