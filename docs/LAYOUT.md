@@ -1,7 +1,7 @@
 # Main Layout - Technical Documentation
 
-> **Last updated**: January 2026
-> **Version**: 1.0.0
+> **Last updated**: January 2026  
+> **Version**: 1.0.0  
 > Keep this documentation synchronized with code changes
 
 ## Table of Contents
@@ -29,7 +29,9 @@
 
 ## Main Components
 
-### 1. [layout](#app/layout.tsx) (Root Layout)
+### 1. layout.tsx (Root Layout)
+
+**Path**: `app/layout.tsx`
 
 **Responsibility**: Next.js App Router root layout. Configures fonts, metadata and wraps the entire app in MainLayout.
 
@@ -37,9 +39,11 @@
 - Server Component by default
 - Loads Google Fonts (Geist Sans, Geist Mono)
 - Defines global metadata
-- Applies Css font variables
+- Applies CSS font variables
 
-### 2. [MainLayout](#src/shared/ui/layout/MainLayout.tsx)
+### 2. MainLayout
+
+**Path**: `src/shared/ui/layout/MainLayout.tsx`
 
 **Responsibility**: Main layout orchestrator. Manages sidebar state and composes Header + Sidebar + Main.
 
@@ -54,9 +58,11 @@ interface MainLayoutProps {
 - Client Component('use client')
 - Vertical flex layout (column)
 
-### 3. [Header](#src/shared/ui/layout/Header.tsx)
+### 3. Header
 
-**Responsibility**: Top bar with logo, hamburger menu(mobile), and user info.
+**Path**: `src/shared/ui/layout/Header.tsx`
+
+**Responsibility**: Top bar with logo, hamburger menu (mobile), and user info.
 
 **Features**:
 - Server Component (stateless)
@@ -65,7 +71,11 @@ interface MainLayoutProps {
 - User placeholder (right side)
 - Shadow and border for visual separation
 
-### 4.  [Sidebar](#src/shared/ui/layout/Sidebar.tsx)
+### 4. Sidebar
+
+**Path
+
+**: `src/shared/ui/layout/Sidebar.tsx`
 
 **Responsibility**: Side navigation with responsive behavior.
 
@@ -81,4 +91,3 @@ interface MainLayoutProps {
   <button className="...">Settings</button>
 </li>
 ```
-
