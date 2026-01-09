@@ -73,9 +73,7 @@ interface MainLayoutProps {
 
 ### 4. Sidebar
 
-**Path
-
-**: `src/shared/ui/layout/Sidebar.tsx`
+**Path**: `src/shared/ui/layout/Sidebar.tsx`
 
 **Responsibility**: Side navigation with responsive behavior.
 
