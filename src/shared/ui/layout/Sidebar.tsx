@@ -1,5 +1,5 @@
+'use client';
 import { useSidebar } from "../../store/useSidebar";
-
 
 export const Sidebar: React.FC = () => {
   const { isOpen, toggleSideBar } = useSidebar();
