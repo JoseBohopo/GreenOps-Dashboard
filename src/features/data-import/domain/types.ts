@@ -1,3 +1,6 @@
+import { IngestDataRow } from "@/src/domain/schemas";
+import { ZodError } from "zod";
+
 export interface UsageDataRow {
     date: string;
     pageViews: number;
@@ -5,22 +8,18 @@ export interface UsageDataRow {
     avgSessionDuration: number;
 }
 
-export type ParseResult<T> =
-    | {
-            success: true;
-            data: T[];
-            rowCount: number;
-        }
-    | {
-            success: false;
-            error: string;
-            details?: string[];
-        };
+export type ParseResult<T> = {
+    success: boolean;
+    invalidRows?: { rowNumber: number; error: string }[];
+    rows: T[];
+    rowCount?: number;
+    error?: string;
+    missingColumns?: string[];
+};
 
 export interface ParsingValidation {
-    hasRequiredColumns: boolean;
+    valid: boolean;
     missingColumns: string[];
-    rowsWithErrors: Array<{ row: number; error: string }>;
 }
 
 export interface UnvalidatedCsvRow {
@@ -41,4 +40,15 @@ export interface UsageDataState {
     clearData: () => void;
     setLoading: (isLoading: boolean) => void;
     setData: (data: UsageDataRow[]) => void;
+}
+
+export interface InvalidRecord {
+    data: UsageDataRow;
+    error: ZodError;
+    rowNumber: number;
+}
+
+export interface ValidationResult {
+    validRows: IngestDataRow[];
+    invalidRows: InvalidRecord[];
 }

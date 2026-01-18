@@ -31,6 +31,15 @@ export const CreateUsageRecordSchema = UsageRecordSchema.omit({
     id: true,
     createdAt: true,
     updatedAt: true,
+});
+
+export type CreateUsageRecordInput = z.infer<typeof CreateUsageRecordSchema>;
+
+export const IngestDataRowSchema = z.object({
+    date: z.string().min(1, 'Date cannot be empty'),
+    pageViews: z.coerce.number().nonnegative('Page views must be non-negative'),
+    dataTransfer: z.coerce.number().nonnegative('Data transfer must be non-negative'),
+    avgSessionDuration: z.coerce.number().nonnegative('Average session duration must be non-negative'),
 })
 
-export type CrateUsageRecordInput = z.infer<typeof CreateUsageRecordSchema>;
+export type IngestDataRow = z.infer<typeof IngestDataRowSchema>;

@@ -19,9 +19,11 @@ export const useUsageDataStore = create<UsageDataState>()(
                     if (result.success) {
                         set(
                             {
-                                usageData: result.data,
+                                usageData: result.rows,
                                 lastUploadDate: new Date().toISOString(),
-                                error: null,
+                                error: result.invalidRows && result.invalidRows.length > 0
+                                    ? `${result.invalidRows.length} invalid rows found due to validation errors.`
+                                    : null,
                                 isLoading: false,
                             },
                             false,
@@ -29,11 +31,11 @@ export const useUsageDataStore = create<UsageDataState>()(
                         );
                     } else {
                         set(
-                            {
-                                usageData: null,
+                            (state) => ({
+                                usageData: state.usageData,
                                 error: result.error,
                                 isLoading: false,
-                            },
+                            }),
                             false,
                             'parse/failure'
                         );
