@@ -224,7 +224,7 @@ function MyComponent() {
 
 ```tsx
 setLoading(isLoading: boolean): void
-processParseResult(result: ParseResult, fileName: string): void
+setParseResult(result: ParseResult, fileName: string): void
 clearData(): void
 setUsageData(data: UsageDataRow[]): void
 ```
@@ -241,13 +241,13 @@ setUsageData(data: UsageDataRow[]): void
 import { useUsageDataStore } from '@/src/features/data-import/application/useUsageDataStore';
 
 function MyComponent() {
-  const { usageData, isLoading, error, processParseResult } = useUsageDataStore();
+  const { usageData, isLoading, error, setParseResult } = useUsageDataStore();
 
   // Access data
   console.log('Records:', usageData?.length);
 
   // Update state
-  processParseResult(parseResult, 'data.csv');
+  setParseResult(parseResult, 'data.csv');
 
   return (
   <div>
@@ -369,7 +369,7 @@ setLoading(true);
 const result = await parseFile(file);
 
 // 3. Process result
-processParseResult(result, file.name);
+setParseResult(result, file.name);
 // This calls internally:
 // - setLoading(false)
 // - setUsageData(result.data) or setError(result.errors)
@@ -451,7 +451,7 @@ interface UsageDataState {
   
   // Actions
   setLoading: (isLoading: boolean) => void;
-  processParseResult: (result: ParseResult, fileName: string) => void;
+  setParseResult: (result: ParseResult, fileName: string) => void;
   clearData: () => void;
   setUsageData: (data: UsageDataRow[]) => void;
 }
@@ -553,12 +553,12 @@ import { useUsageDataStore } from '@/src/features/data-import/application/useUsa
 
 function CustomUploader() {
   const { parseFile } = useCsvWorker();
-  const { processParseResult, isLoading } = useUsageDataStore();
+  const { setParseResult, isLoading } = useUsageDataStore();
 
   const handleFileUpload = async (file: File) => {
   try {
     const result = await parseFile(file);
-    processParseResult(result, file.name);
+    setParseResult(result, file.name);
     
     if (result.success) {
     console.log(`Loaded ${result.data.length} rows`);
@@ -686,7 +686,7 @@ ISO timestamp of last successful upload.
 
 Manually set loading state.
 
-#### `processParseResult(result: ParseResult, fileName: string): void`
+#### `setParseResult(result: ParseResult, fileName: string): void`
 
 Process parse result and update store accordingly.
 
@@ -694,6 +694,96 @@ Process parse result and update store accordingly.
 
 - `result`: Parse result from worker
 - `fileName`: Name of uploaded file (for logging)
+
+---
+
+### validation.ts
+
+**Path**: `src/features/data-import/domain/validation.ts`
+
+**Responsibility**: Domain-level validation using Zod schemas.
+
+**Main Function**:
+```tsx
+export const validateUsageData = (
+  data: ParseResult<unknown>
+): ValidationResult
+```
+**Process**:
+
+1. Checks if CSV parsing was successful
+2. Iterates through each parsed row
+3. Validates against IngestDataRowSchema (Zod schema)
+4. Separates valid rows from invalid rows
+5. Captures error details and row numbers
+
+**Types**:
+
+```tsx
+interface ValidationResult {
+  validRows: IngestDataRow[];
+  invalidRows: InvalidRecord[];
+}
+
+interface InvalidRecord {
+  data: UsageDataRow;
+  error: ZodError;
+  rowNumber: number;
+}
+```
+
+**Complete Implementation:**:
+
+```tsx
+import { IngestDataRowSchema } from "@/src/domain/schemas";
+
+export const validateUsageData = (
+  data: ParseResult<unknown>
+): ValidationResult => {
+  if (!data.success) {
+    return { validRows: [], invalidRows: [] };
+  }
+
+  return data.rows.reduce<ValidationResult>(
+    (acc, row, index) => {
+      const parseResult = IngestDataRowSchema.safeParse(row);
+
+      if (parseResult.success && parseResult.data) {
+        acc.validRows.push(parseResult.data);
+      } 
+      if (parseResult.error) {
+        acc.invalidRows.push({
+          data: row as UsageDataRow,
+          error: parseResult.error,
+          rowNumber: index + 1,
+        });
+      }
+
+      return acc;
+    },
+    { validRows: [], invalidRows: [] }
+  );
+};
+```
+**Complete Implementation:**:
+```tsx
+import { parseCsv } from './csvParser';
+import { validateUsageData } from '../domain/validation';
+
+const parseResult = await parseCsv(fileContent);
+const validationResult = validateUsageData(parseResult);
+
+postMessage({
+  success: validationResult.validRows.length > 0,
+  data: validationResult.validRows,
+  errors: validationResult.invalidRows
+});
+```
+**Benefits:**:
+- Separation of concerns (Clean Architecture)
+- Reusable validation logic
+- Easier testing (unit test parsing and validation separately)
+- Flexibility (can swap CSV parser without changing validation)
 
 ---
 
@@ -735,8 +825,8 @@ Process parse result and update store accordingly.
 ✓ Initial state
 ✓ setLoading updates state
 ✓ clearData resets state
-✓ processParseResult with success
-✓ processParseResult with errors
+✓ setParseResult with success
+✓ setParseResult with errors
 ✓ Persistence to localStorage
 ✓ Rehydration from localStorage
 ```

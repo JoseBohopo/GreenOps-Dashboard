@@ -55,8 +55,9 @@ interface MainLayoutProps {
 ```
 
 **Features**:
-- Client Component('use client')
-- Vertical flex layout (column)
+- Server Component (no `'use client'` - no needs state)
+- Composes Header + Sidebar + Main
+- No local state (sidebar state managed by Zustand)
 
 ### 3. Header
 
@@ -65,11 +66,12 @@ interface MainLayoutProps {
 **Responsibility**: Top bar with logo, hamburger menu (mobile), and user info.
 
 **Features**:
-- Server Component (stateless)
+- Client Component ('use client')
 - Hamburger button only visible on mobile
 - Logo/title visually centered
 - User placeholder (right side)
 - Shadow and border for visual separation
+- Manages sidebar toggle state
 
 ### 4. Sidebar
 
@@ -88,4 +90,39 @@ interface MainLayoutProps {
 <li>
   <button className="...">Settings</button>
 </li>
+```
+---
+
+### 5. `useSidebar` Store
+
+**Path**: `src/shared/store/useSidebar.ts`
+
+**Responsibility**: Global state management for sidebar visibility.
+
+**Type Definition**:
+```tsx
+interface SidebarState {
+  isOpen: boolean;
+  toggleSideBar: () => void;
+}
+```
+
+**Features**:
+- Zustand store (lightweight, no Context API)
+- Initial state: isOpen: false (closed by default on mobile)
+- Single action: toggleSideBar() - toggles boolean
+
+**Complete Code**:
+```tsx
+import { create } from "zustand";
+
+interface SidebarState {
+  isOpen: boolean;
+  toggleSideBar: () => void;
+}
+
+export const useSidebar = create<SidebarState>((set) => ({
+  isOpen: false,
+  toggleSideBar: () => set((state) => ({ isOpen: !state.isOpen }))
+}));
 ```
