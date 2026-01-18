@@ -70,7 +70,7 @@ describe("usageDataStore", () => {
 
             const successResult: ParseResult<UsageDataRow> = {
                 success: true,
-                data: mockData,
+                rows: mockData,
                 rowCount: 1,
             };
 
@@ -88,8 +88,9 @@ describe("usageDataStore", () => {
         it("setParseResult should update state on error", async () => {
             const errorResult: ParseResult<UsageDataRow> = {
                 success: false,
+                rows: [],
                 error: "Invalid CSV",
-                details: ["Missing columns"],
+                missingColumns: ["Missing columns"],
             };
 
             useUsageDataStore.getState().setParseResult(errorResult);
@@ -108,7 +109,7 @@ describe("usageDataStore", () => {
             ];
             const successResult: ParseResult<UsageDataRow> = {
                 success: true,
-                data: mockData,
+                rows: mockData,
                 rowCount: 1,
             };
 
