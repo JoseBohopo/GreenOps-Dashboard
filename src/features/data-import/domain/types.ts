@@ -35,6 +35,8 @@ export interface UsageDataState {
     isLoading: boolean;
     error: string | null;
     lastUploadDate: string | null;
+    missingColumns?: string[];
+    invalidRows?: { rowNumber: number; error: string }[];
 
     setParseResult: (result: ParseResult<UsageDataRow>) => void;
     clearData: () => void;

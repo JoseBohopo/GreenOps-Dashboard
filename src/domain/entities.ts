@@ -5,7 +5,7 @@
  * These entities are for types that don't need runtime validation yet
  */
 
-export type { UsageRecordValidated, CrateUsageRecordInput } from './schemas';
+export type { UsageRecordValidated } from './schemas';
 
 export interface Report {
     id: string;

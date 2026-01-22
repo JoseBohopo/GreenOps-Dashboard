@@ -10,6 +10,8 @@ export const useUsageDataStore = create<UsageDataState>()(
                 isLoading: false,
                 error: null,
                 lastUploadDate: null,
+                missingColumns: undefined,
+                invalidRows: undefined,
 
                 setLoading: (isLoading: boolean) => {
                     set({ isLoading }, false, isLoading ? 'parse/start' : 'parse/end');
@@ -21,9 +23,10 @@ export const useUsageDataStore = create<UsageDataState>()(
                             {
                                 usageData: result.rows,
                                 lastUploadDate: new Date().toISOString(),
-                                error: result.invalidRows && result.invalidRows.length > 0
-                                    ? `${result.invalidRows.length} invalid rows found due to validation errors.`
-                                    : null,
+                                error:
+                                    result.invalidRows && result.invalidRows.length > 0
+                                        ? `${result.invalidRows.length} rows had errors and were skipped.`
+                                        : null,
                                 isLoading: false,
                             },
                             false,
@@ -33,7 +36,28 @@ export const useUsageDataStore = create<UsageDataState>()(
                         set(
                             (state) => ({
                                 usageData: state.usageData,
-                                error: result.error,
+                                error: result.error || 'Failed to parse CSV file.',
+                                missingColumns: result.missingColumns,
+                                invalidRows:
+                                    result.invalidRows && result.invalidRows.length > 0
+                                        ? result.invalidRows.map((row) => {
+                                              try {
+                                                  const errorData = JSON.parse(row.error);
+                                                  const firstIssue = Array.isArray(errorData) ? errorData[0] : errorData;
+                                                  const field = firstIssue?.path?.[0] || 'unknown';
+                                                  const message = firstIssue?.message || 'Validation error';
+                                                  return {
+                                                      rowNumber: row.rowNumber,
+                                                      error: `${field}: ${message}`,
+                                                  };
+                                              } catch {
+                                                  return {
+                                                      rowNumber: row.rowNumber,
+                                                      error: row.error,
+                                                  };
+                                              }
+                                          })
+                                        : undefined,
                                 isLoading: false,
                             }),
                             false,
@@ -43,7 +67,17 @@ export const useUsageDataStore = create<UsageDataState>()(
                 },
 
                 clearData: () =>
-                    set({ usageData: null, lastUploadDate: null, error: null }, false, 'data/clear'),
+                    set(
+                        {
+                            usageData: null,
+                            lastUploadDate: null,
+                            error: null,
+                            missingColumns: undefined,
+                            invalidRows: undefined,
+                        },
+                        false,
+                        'data/clear'
+                    ),
                 setData: (data: UsageDataRow[]) => set({ usageData: data }, false, 'data/set'),
             }),
             {

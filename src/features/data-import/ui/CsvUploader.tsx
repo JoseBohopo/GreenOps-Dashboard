@@ -11,7 +11,7 @@ export const CsvUploader = () => {
 
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const { usageData, isLoading, error, setLoading, clearData, setParseResult } =
+  const { usageData, isLoading, error, missingColumns, invalidRows,setLoading, clearData, setParseResult } =
     useUsageDataStore()
   const { parseFile } = useCsvWorker()
 
@@ -63,13 +63,11 @@ export const CsvUploader = () => {
     }
   }
 
-  const handleButtonClick = () => {
-    fileInputRef.current?.click()
-  }
-
   const hasData = usageData && usageData.length > 0
   const isWarning = error?.includes('ignored')
   const isError = error && !isWarning
+  const hasMissingColumns = missingColumns && missingColumns.length > 0
+  const hasInvalidRows = invalidRows && invalidRows.length > 0
 
   return (
     <div className="mx-auto max-w-xs rounded-lg bg-white p-4 shadow-md sm:p-6 md:max-w-md lg:p-8">
@@ -98,7 +96,7 @@ export const CsvUploader = () => {
         <button
           type="button"
           title={selectedFile?.name || 'Choose CSV file...'}
-          onClick={handleButtonClick}
+          onClick={() => fileInputRef.current?.click()}
           disabled={isLoading}
           className="w-full truncate rounded-md border-2 border-gray-300 bg-white
             px-4 py-2 text-left text-sm font-medium
@@ -150,6 +148,16 @@ export const CsvUploader = () => {
           className="mb-4 rounded-md border border-red-200 bg-red-50 p-3"
         >
           <p className="text-sm font-semibold text-red-700">{error}</p>
+          {hasMissingColumns &&  missingColumns.map((col) => (
+            <p key={col} className="mt-1 text-xs text-red-600">
+              Missing required column: {col}
+            </p>
+          ))}
+          {hasInvalidRows && invalidRows.map(({ rowNumber, error }) => (
+            <p key={rowNumber} className="mt-1 text-xs text-red-600">
+              Row {rowNumber}: {error}
+            </p>
+          ))}
         </div>
       )}
 
