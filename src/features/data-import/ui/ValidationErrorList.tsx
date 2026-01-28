@@ -7,7 +7,7 @@ interface ValidationErrorListProps {
     missingColumns: string[],
     error: string,
 }
-const ValidationErrorList: React.FC<ValidationErrorListProps> = ({ hasMissingColumns, hasInvalidRows, missingColumns, invalidRows, error }) => {
+const ValidationErrorListComponent: React.FC<ValidationErrorListProps> = ({ hasMissingColumns, hasInvalidRows, missingColumns, invalidRows, error }) => {
   return (
             <div
           role="alert"
@@ -28,4 +28,4 @@ const ValidationErrorList: React.FC<ValidationErrorListProps> = ({ hasMissingCol
   )
 }
 
-export default React.memo(ValidationErrorList);
+export const ValidationErrorList = React.memo(ValidationErrorListComponent);

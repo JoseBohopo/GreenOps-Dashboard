@@ -6,7 +6,7 @@ interface UploadSummaryProps {
     isWarning?: boolean
 }
 
-const UploadSummary: React.FC<UploadSummaryProps> = ({ rows, error, isWarning }) => {
+const UploadSummaryComponent: React.FC<UploadSummaryProps> = ({ rows, error, isWarning }) => {
   return (
      <div
           aria-live="polite"
@@ -50,4 +50,4 @@ const UploadSummary: React.FC<UploadSummaryProps> = ({ rows, error, isWarning })
   )
 }
 
-export default React.memo(UploadSummary);
+export const UploadSummary = React.memo(UploadSummaryComponent);

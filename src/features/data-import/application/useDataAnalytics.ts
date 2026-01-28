@@ -1,3 +1,4 @@
+'use client';
 import { UsageDataRow } from "../domain/types";
 import { useUsageDataStore } from "./useUsageDataStore";
 
@@ -12,9 +13,7 @@ export interface DataInsights {
     } | null;
 }
 
-export const calculateDataInsights = (
-    data: UsageDataRow[] | null,
-): DataInsights => {
+export const calculateDataInsights = (data: UsageDataRow[] | null): DataInsights => {
     if (!data || data.length === 0) {
         return {
             totalPageViews: 0,
@@ -27,22 +26,16 @@ export const calculateDataInsights = (
 
     const totalPageViews = data.reduce((sum, row) => sum + row.pageViews, 0);
 
-    const totalSessionDuration = data.reduce(
-        (sum, row) => sum + row.avgSessionDuration,
-        0,
-    );
+    const totalSessionDuration = data.reduce((sum, row) => sum + row.avgSessionDuration, 0);
     const avgSessionDuration = totalSessionDuration / data.length;
-    const totalDataTransfer = data.reduce(
-        (sum, row) => sum + row.dataTransfer,
-        0,
-    );
+    const totalDataTransfer = data.reduce((sum, row) => sum + row.dataTransfer, 0);
     const totalRecords = data.length;
 
-    const dates = data.map((row) => row.date).sort();
+    const dates = data.map(row => row.date).sort((a, b) => a.localeCompare(b));
     const dateRange = {
         from: dates[0],
-        to: dates.at(-1)!,
-    };
+        to: dates.at(-1)!
+    }
 
     return {
         totalPageViews,
@@ -50,7 +43,7 @@ export const calculateDataInsights = (
         avgSessionDuration: Math.round(avgSessionDuration),
         totalRecords,
         dateRange,
-    };
+  };
 };
 
 export const useDataInsights = (): DataInsights => {

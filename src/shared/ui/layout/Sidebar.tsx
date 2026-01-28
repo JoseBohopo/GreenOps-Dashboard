@@ -1,4 +1,5 @@
 'use client';
+import Link from "next/link";
 import { useSidebar } from "../../store/useSidebar";
 
 export const Sidebar: React.FC = () => {
@@ -37,22 +38,34 @@ export const Sidebar: React.FC = () => {
       <nav className="flex-1 p-4 overflow-y-auto" aria-label="Menú principal">
         <ul className="space-y-2">
           <li>
-            <button
+            <Link href="/import"
+              className="w-full text-left p-2 hover:bg-gray-700 rounded cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+              aria-current="page"
+            >
+              Import
+            </Link>
+          </li>
+          <li>
+            <Link href="#"
               className="w-full text-left p-2 hover:bg-gray-700 rounded cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
               aria-current="page"
             >
               Dashboard
-            </button>
+            </Link>
           </li>
           <li>
-            <button className="w-full text-left p-2 hover:bg-gray-700 rounded cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <Link href="#"
+              className="w-full text-left p-2 hover:bg-gray-700 rounded cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
               Metrics
-            </button>
+            </Link>
           </li>
           <li>
-            <button className="w-full text-left p-2 hover:bg-gray-700 rounded cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <Link href="#"
+              className="w-full text-left p-2 hover:bg-gray-700 rounded cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
               Settings
-            </button>
+            </Link>
           </li>
         </ul>
       </nav>

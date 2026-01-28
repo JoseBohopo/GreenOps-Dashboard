@@ -2,9 +2,9 @@
 import React, { useRef, useState } from 'react'
 import { useUsageDataStore } from '../application/useUsageDataStore'
 import { useCsvWorker } from '../application/useCsvWorker'
-import UploadSummary from './UploadSummary'
-import FileInfoSummary from './FileInfoSummary'
-import ValidationErrorList from './ValidationErrorList'
+import { UploadSummary } from './UploadSummary'
+import { FileInfoSummary } from './FileInfoSummary'
+import { ValidationErrorList } from './ValidationErrorList'
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024
 

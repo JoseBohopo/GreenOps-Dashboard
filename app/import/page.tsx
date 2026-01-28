@@ -1,4 +1,5 @@
 import { CsvUploader } from '@/src/features/data-import/ui/CsvUploader'
+import { DataSummary } from '@/src/features/data-import/ui/DataSummary'
 
 const ImportPage = () => {
   return (
@@ -10,6 +11,7 @@ const ImportPage = () => {
         Upload a CSV file with usage data to analyze environmental impact.
       </p>
       <CsvUploader />
+      <DataSummary />
     </div>
   )
 }

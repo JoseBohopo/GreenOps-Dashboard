@@ -96,7 +96,7 @@ describe("usageDataStore", () => {
             useUsageDataStore.getState().setParseResult(errorResult);
 
             const state = useUsageDataStore.getState();
-            expect(state.usageData).toBeNull();
+            expect(state.usageData).toEqual([]);
             expect(state.error).toBe("Invalid CSV");
             expect(state.isLoading).toBe(false);
         });

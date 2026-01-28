@@ -6,7 +6,7 @@ interface FileInfoSummaryProps {
     size: number
   }
 }
-const FileInfoSummary: React.FC<FileInfoSummaryProps> = ({ selectedFile }) => {
+const FileInfoSummaryComponent: React.FC<FileInfoSummaryProps> = ({ selectedFile }) => {
   return (
             <div className="mb-4 w-56 rounded-lg border border-green-200 bg-green-50 p-3 sm:w-sm sm:p-4">
           <div className="flex items-start gap-2">
@@ -37,4 +37,4 @@ const FileInfoSummary: React.FC<FileInfoSummaryProps> = ({ selectedFile }) => {
   )
 }
 
-export default React.memo(FileInfoSummary);
+export const FileInfoSummary = React.memo(FileInfoSummaryComponent);
