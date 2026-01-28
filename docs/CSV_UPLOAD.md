@@ -378,6 +378,47 @@ setParseResult(result, file.name);
 
 ---
 
+## State Management (`useUsageDataStore.ts`)
+
+The `zustand` store holds the global state for the feature.
+
+-   `usageData: UsageDataRow[] | null`: Array of successfully validated and processed data rows.
+-   `isLoading: boolean`: True during file parsing and processing.
+-   `error: string | null`: General error message (e.g., file parsing failed).
+-   `invalidRows: InvalidRowInfo[] | undefined`: Detailed list of rows that failed validation, including row number and a human-readable error message.
+-   `missingColumns: string[] | undefined`: Captured if the CSV is missing required headers.
+
+---
+
+## Data Analytics (`useDataAnalytics.ts`)
+
+-   **`calculateDataInsights(data)`**: A pure function that takes an array of `UsageDataRow` and returns an `DataInsights` object containing aggregated metrics:
+    -   `totalPageViews`
+    -   `avgSessionDuration`
+    -   `totalDataTransfer`
+    -   `totalRecords`
+    -   `dateRange`
+-   **`useDataInsights()`**: A custom hook that connects the analytics function to the `useUsageDataStore`, providing components with ready-to-display insights.
+-   **`formatters`**: Utility functions in `shared/utils` format raw numbers into human-readable strings (e.g., `1024` -> `"1.0 KB"`, `5000` -> `"5.0K"`).
+
+---
+
+## Error Handling
+
+-   **File-level errors**: Invalid file type or size errors are handled synchronously in `CsvUploader` before processing begins.
+-   **Parsing errors**: Structural CSV errors from PapaParse are caught in the worker and sent back as a failed `ParseResult`.
+-   **Validation errors**: Row-level errors from Zod are collected into the `invalidRows` array. The UI displays these clearly, allowing the user to correct their source file. The presence of invalid rows is treated as a "warning" state, as valid data is still processed.
+
+---
+
+## Testing
+
+-   **Unit Tests (Vitest)**:
+    -   `useDataAnalytics.test.ts`: Verifies the correctness of all aggregation logic.
+    -   `validation.test.ts`: Ensures the Zod schemas correctly identify valid and invalid data structures.
+    -   `useUsageDataStore.test.ts`: Mocks worker responses to test state transitions for success, partial success, and failure scenarios.
+-   **Component Tests (RTL)**: Planned for critical UI components like `DataSummary` to ensure they render correctly based on store state.
+
 ## Validation Rules
 
 ### File Validation
