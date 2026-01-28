@@ -2,7 +2,7 @@
 
 A **frontend-only product dashboard** that helps teams **understand and reduce the estimated environmental impact of web usage** by transforming usage data into clear insights and actionable recommendations.
 
-> This project is intentionally **frontend-only**.  
+> This project is intentionally **frontend-only**.
 > All data processing, state management, and logic live in the browser.
 
 ---
@@ -48,25 +48,24 @@ It is designed as a **product-oriented frontend exercise**, not as a real carbon
 
 ## Core MVP features (vertical slices)
 
-### 1. Data ingestion
-- Upload a CSV file or load a predefined dataset
-- Validate and parse records in the browser
-- Handle invalid data gracefully
+### ✅ 1. Data ingestion & Feedback
+- Upload a CSV file or load a predefined dataset.
+- Validate and parse records in the browser.
+- Handle invalid data gracefully, showing detailed per-row errors.
 
-### 2. Insights
-- Aggregate data by time period (weekly / monthly)
-- Identify top contributors (pages, assets, sessions)
-- Present trends clearly
+### ✅ 2. First Insights
+- Aggregate key metrics from the loaded data (page views, data transfer, etc.).
+- Present a high-level summary dashboard to the user immediately after upload.
 
-### 3. Recommendations
-- Generate simple, rule-based recommendations
-- Prioritize actions by estimated impact
-- Explain *why* each recommendation exists
+### 🔲 3. Recommendations
+- Generate simple, rule-based recommendations.
+- Prioritize actions by estimated impact.
+- Explain *why* each recommendation exists.
 
-### 4. Report history
-- Persist generated reports locally
-- Compare previous runs
-- Enable quick iteration and learning
+### 🔲 4. Report history
+- Persist generated reports locally.
+- Compare previous runs.
+- Enable quick iteration and learning.
 
 ---
 
@@ -76,7 +75,7 @@ It is designed as a **product-oriented frontend exercise**, not as a real carbon
 ```text
 📁 src/
  ├─ 📁 features/
- │   ├─ 📁 ingestion/
+ │   ├─ 📁 data-import/
  │   ├─ 📁 insights/
  │   └─ 📁 recommendations/
  ├─ 📁 domain/
