@@ -1,18 +1,16 @@
 'use client'
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { useUsageDataStore } from '../application/useUsageDataStore'
 import { useCsvWorker } from '../application/useCsvWorker'
 import { UploadSummary } from './UploadSummary'
-import { FileInfoSummary } from './FileInfoSummary'
 import { ValidationErrorList } from './ValidationErrorList'
+import { FileInput } from '@/src/shared/ui/FileInput'
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024
 
 export const CsvUploader = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [fileError, setFileError] = useState<string | null>(null)
-
-  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const {
     usageData,
@@ -86,47 +84,14 @@ export const CsvUploader = () => {
         Load Usage Data CSV
       </h2>
 
-      <div className="mb-4 w-56 max-w-xs sm:w-sm md:max-w-md">
-        <label
-          htmlFor="csv-file"
-          aria-label="Select Csv File"
-          className="mb-2 block text-sm font-medium text-gray-700"
-        >
-          Select CSV File
-        </label>
-        <input
-          ref={fileInputRef}
-          id="csv-file"
-          type="file"
-          accept=".csv"
-          onChange={handleFileChange}
-          disabled={isLoading}
-          className="hidden"
-        />
-
-        <button
-          type="button"
-          title={selectedFile?.name || 'Choose CSV file...'}
-          onClick={() => fileInputRef.current?.click()}
-          disabled={isLoading}
-          className="w-full truncate rounded-md border-2 border-gray-300 bg-white
-            px-4 py-2 text-left text-sm font-medium
-            text-gray-700 hover:border-gray-400 hover:bg-gray-50 focus:outline-none
-            focus:ring-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {selectedFile ? selectedFile.name : 'Choose CSV file...'}
-        </button>
-      </div>
-
-      {fileError && (
-        <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3">
-          <p className="text-sm text-red-600">{fileError}</p>
-        </div>
-      )}
-
-      {selectedFile && !fileError && !hasData && (
-        <FileInfoSummary selectedFile={selectedFile} />
-      )}
+      <FileInput
+        selectedFile={selectedFile}
+        handleFileChange={handleFileChange}
+        isLoading={isLoading}
+        fileError={fileError}
+        hasData={hasData}
+        label="Select a CSV file containing usage data"
+      />
 
       {isError && (
         <ValidationErrorList
