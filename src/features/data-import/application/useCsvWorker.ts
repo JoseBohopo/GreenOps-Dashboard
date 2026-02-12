@@ -10,20 +10,19 @@ export const useCsvWorker = () => {
 
             const worker = workerRef.current
 
-            const handleMessage = (event: MessageEvent<ParseResult<UsageDataRow>>) => {
-                worker.removeEventListener('message', handleMessage)
-                worker.removeEventListener('error', handleError)
-                resolve(event.data)
+            const handleResponse = (event:  MessageEvent<ParseResult<UsageDataRow>> | ErrorEvent) => {
+                worker.removeEventListener('message', handleResponse)
+                worker.removeEventListener('error', handleResponse)
+
+                if(event instanceof ErrorEvent) {
+                    reject(new Error(`Worker error: ${event.message}`))
+                } else {
+                    resolve(event.data)
+                }
             }
 
-            const handleError = (error: ErrorEvent) => {
-                worker.removeEventListener('message', handleMessage)
-                worker.removeEventListener('error', handleError)
-                reject(new Error(`Worker error: ${error.message}`))
-            }
-
-            worker.addEventListener('message', handleMessage)
-            worker.addEventListener('error', handleError)
+            worker.addEventListener('message', handleResponse)
+            worker.addEventListener('error', handleResponse)
 
             worker.postMessage({ file })
         })
