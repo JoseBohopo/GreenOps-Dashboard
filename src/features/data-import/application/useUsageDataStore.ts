@@ -2,6 +2,37 @@ import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { UsageDataRow, ParseResult, UsageDataState } from '../domain/types';
 
+const invalidRowsErrorResult = (
+    invalidRows: Partial<ParseResult<UsageDataRow>['invalidRows']>
+) => {
+    return invalidRows && invalidRows.length > 0
+        ? invalidRows.map((row) => {
+                if (!row)
+                    return {
+                        rowNumber: 0,
+                        error: 'Unknown validation error',
+                    };
+                try {
+                    const errorData = JSON.parse(row.error);
+                    const firstIssue = Array.isArray(errorData)
+                        ? errorData[0]
+                        : errorData;
+                    const field = firstIssue?.path?.[0] || 'unknown';
+                    const message = firstIssue?.message || 'Validation error';
+                    return {
+                        rowNumber: row.rowNumber,
+                        error: `${field}: ${message}`,
+                    };
+                } catch {
+                    return {
+                        rowNumber: row.rowNumber,
+                        error: row.error,
+                    };
+                }
+            })
+        : undefined;
+};
+
 export const useUsageDataStore = create<UsageDataState>()(
     devtools(
         persist(
@@ -24,56 +55,19 @@ export const useUsageDataStore = create<UsageDataState>()(
                                 usageData: result.rows,
                                 lastUploadDate: new Date().toISOString(),
                                 error: result.error || null,
-                                invalidRows:
-                                    result.invalidRows && result.invalidRows.length > 0
-                                        ? result.invalidRows.map((row) => {
-                                              try {
-                                                  const errorData = JSON.parse(row.error);
-                                                  const firstIssue = Array.isArray(errorData) ? errorData[0] : errorData;
-                                                  const field = firstIssue?.path?.[0] || 'unknown';
-                                                  const message = firstIssue?.message || 'Validation error';
-                                                  return {
-                                                      rowNumber: row.rowNumber,
-                                                      error: `${field}: ${message}`,
-                                                  };
-                                              } catch {
-                                                  return {
-                                                      rowNumber: row.rowNumber,
-                                                      error: row.error,
-                                                  };
-                                              }
-                                          })
-                                        : undefined,
+                                invalidRows: invalidRowsErrorResult(result.invalidRows),
                                 isLoading: false,
                             },
                             false,
                             'parse/success'
                         );
                     } else {
-                        set({
+                        set(
+                            {
                                 usageData: result.rows || null,
                                 error: result.error || 'Failed to parse CSV file.',
                                 missingColumns: result.missingColumns,
-                                invalidRows:
-                                    result.invalidRows && result.invalidRows.length > 0
-                                        ? result.invalidRows.map((row) => {
-                                              try {
-                                                  const errorData = JSON.parse(row.error);
-                                                  const firstIssue = Array.isArray(errorData) ? errorData[0] : errorData;
-                                                  const field = firstIssue?.path?.[0] || 'unknown';
-                                                  const message = firstIssue?.message || 'Validation error';
-                                                  return {
-                                                      rowNumber: row.rowNumber,
-                                                      error: `${field}: ${message}`,
-                                                  };
-                                              } catch {
-                                                  return {
-                                                      rowNumber: row.rowNumber,
-                                                      error: row.error,
-                                                  };
-                                              }
-                                          })
-                                        : undefined,
+                                invalidRows: invalidRowsErrorResult(result.invalidRows),
                                 isLoading: false,
                             },
                             false,
@@ -94,6 +88,7 @@ export const useUsageDataStore = create<UsageDataState>()(
                         false,
                         'data/clear'
                     ),
+
                 setData: (data: UsageDataRow[]) => set({ usageData: data }, false, 'data/set'),
             }),
             {
