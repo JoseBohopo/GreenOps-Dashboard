@@ -1,16 +1,13 @@
 'use client';
+import { DataInsights } from "@/src/shared/types";
 import { UsageDataRow } from "../domain/types";
 import { useUsageDataStore } from "./useUsageDataStore";
 
-export interface DataInsights {
+interface Accumulator {
     totalPageViews: number;
-    avgSessionDuration: number;
+    totalSessionDuration: number;
     totalDataTransfer: number;
-    totalRecords: number;
-    dateRange: {
-        from: string;
-        to: string;
-    } | null;
+    dates: string[];
 }
 
 export const calculateDataInsights = (data: UsageDataRow[] | null): DataInsights => {
@@ -24,26 +21,23 @@ export const calculateDataInsights = (data: UsageDataRow[] | null): DataInsights
         };
     }
 
-    const totalPageViews = data.reduce((sum, row) => sum + row.pageViews, 0);
 
-    const totalSessionDuration = data.reduce((sum, row) => sum + row.avgSessionDuration, 0);
-    const avgSessionDuration = totalSessionDuration / data.length;
-    const totalDataTransfer = data.reduce((sum, row) => sum + row.dataTransfer, 0);
-    const totalRecords = data.length;
+const result = data.reduce<Accumulator>((acc, row) => {
+    acc.totalPageViews += row.pageViews;
+    acc.totalSessionDuration += row.avgSessionDuration;
+    acc.totalDataTransfer += row.dataTransfer;
+    acc.dates.push(row.date);
+    acc.dates.toSorted((a, b) => a.localeCompare(b));
+    return acc;
+}, { totalPageViews: 0, totalSessionDuration: 0, totalDataTransfer: 0, dates: [] });
 
-    const dates = data.map(row => row.date).sort((a, b) => a.localeCompare(b));
-    const dateRange = {
-        from: dates[0],
-        to: dates.at(-1)!
-    }
-
-    return {
-        totalPageViews,
-        totalDataTransfer,
-        avgSessionDuration: Math.round(avgSessionDuration),
-        totalRecords,
-        dateRange,
-  };
+return {
+    totalPageViews: result.totalPageViews,
+    avgSessionDuration: result.totalSessionDuration / data.length,
+    totalDataTransfer: result.totalDataTransfer,
+    totalRecords: data.length,
+    dateRange: result.dates.length > 0 ? { from: result.dates[0], to: result.dates.at(-1)! } : null,
+};
 };
 
 export const useDataInsights = (): DataInsights => {

@@ -2,7 +2,7 @@
 import React from 'react';
 import { MetricCard } from '../../../shared/ui/MetricCard';
 import { METRIC_CONFIGS } from '../application/metricConfigs';
-import { DataInsights } from '../application/useDataAnalytics';
+import { DataInsights } from '@/src/shared/types';
 
 interface DataSummaryProps {
   insights: DataInsights;

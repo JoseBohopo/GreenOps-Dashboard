@@ -1,4 +1,4 @@
-import { DataInsights } from './useDataAnalytics';
+import { DataInsights } from '@/src/shared/types';
 import { formatBytes, formatDateRange, formatDuration, formatNumber } from '../../../shared/utils/formatNumber';
 import { EyeIcon, ClockIcon, DatabaseIcon, DocumentIcon } from '../../../shared/ui/icons';
 import React from 'react';
