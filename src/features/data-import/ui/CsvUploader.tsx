@@ -127,7 +127,7 @@ export const CsvUploader = () => {
           onClick={clearData}
           disabled={!hasData || !!fileError || isLoading}
           className="w-full rounded-md bg-red-600 px-4 py-2 font-semibold text-white
-            transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500
+            transition-colors hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-blue-500
             focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-gray-300"
         >
           Clear Data
