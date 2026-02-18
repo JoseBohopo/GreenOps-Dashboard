@@ -8,6 +8,13 @@ export interface UsageDataRow {
     avgSessionDuration: number;
 }
 
+export interface Accumulator {
+    totalPageViews: number;
+    totalSessionDuration: number;
+    totalDataTransfer: number;
+    dates: string[];
+}
+
 export type ParseResult<T> = {
     success: boolean;
     invalidRows?: { rowNumber: number; error: string }[];
@@ -15,7 +22,7 @@ export type ParseResult<T> = {
     rowCount?: number;
     error?: string;
     missingColumns?: string[];
-};
+}
 
 export interface ParsingValidation {
     valid: boolean;

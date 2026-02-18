@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { calculateDataInsights } from '../useDataAnalytics';
-import { UsageDataRow } from '../../domain/types';
+import { calculateDataInsights } from '../calculations';
+import { UsageDataRow } from '../types';
 
 describe('calculateDataInsights', () => {
   const mockData: UsageDataRow[] = [

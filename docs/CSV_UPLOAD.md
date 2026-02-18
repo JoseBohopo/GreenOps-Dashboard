@@ -392,12 +392,6 @@ The `zustand` store holds the global state for the feature.
 
 ## Data Analytics (`useDataAnalytics.ts`)
 
--   **`calculateDataInsights(data)`**: A pure function that takes an array of `UsageDataRow` and returns an `DataInsights` object containing aggregated metrics:
-    -   `totalPageViews`
-    -   `avgSessionDuration`
-    -   `totalDataTransfer`
-    -   `totalRecords`
-    -   `dateRange`
 -   **`useDataInsights()`**: A custom hook that connects the analytics function to the `useUsageDataStore`, providing components with ready-to-display insights.
 -   **`formatters`**: Utility functions in `shared/utils` format raw numbers into human-readable strings (e.g., `1024` -> `"1.0 KB"`, `5000` -> `"5.0K"`).
 
@@ -735,6 +729,19 @@ Process parse result and update store accordingly.
 
 - `result`: Parse result from worker
 - `fileName`: Name of uploaded file (for logging)
+
+---
+
+### calculations.ts
+
+**Path**: `src/features/data-import/domain/calculations.ts`
+
+-   **`calculateDataInsights(data)`**: A pure function that takes an array of `UsageDataRow` and returns an `DataInsights` object containing aggregated metrics:
+    -   `totalPageViews`
+    -   `avgSessionDuration`
+    -   `totalDataTransfer`
+    -   `totalRecords`
+    -   `dateRange`
 
 ---
 
