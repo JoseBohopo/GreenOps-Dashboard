@@ -36,7 +36,7 @@ const DataSummaryComponent: React.FC<DataSummaryProps> = ({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 mt-8">
       <div>
         <h3 className="mb-2 text-lg font-semibold text-gray-900">{title}</h3>
         <p className="text-sm text-gray-600">{subtitle}</p>

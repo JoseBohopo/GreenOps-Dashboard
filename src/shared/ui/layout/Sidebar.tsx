@@ -11,7 +11,7 @@ export const Sidebar: React.FC = () => {
         bg-gray-800 text-white w-full lg:w-64 
         transform transition-transform duration-300 ease-in-out
         ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-        flex flex-col h-screen
+        flex flex-col min-h-screen
       `}
       aria-label="Main navigation"
     >
@@ -39,6 +39,7 @@ export const Sidebar: React.FC = () => {
         <ul className="space-y-2">
           <li>
             <Link href="/import"
+              onClick={toggleSideBar}
               className="w-full text-left p-2 hover:bg-gray-700 rounded cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
               aria-current="page"
             >
@@ -46,7 +47,8 @@ export const Sidebar: React.FC = () => {
             </Link>
           </li>
           <li>
-            <Link href="#"
+            <Link href="/"
+              onClick={toggleSideBar}
               className="w-full text-left p-2 hover:bg-gray-700 rounded cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
               aria-current="page"
             >
@@ -54,14 +56,16 @@ export const Sidebar: React.FC = () => {
             </Link>
           </li>
           <li>
-            <Link href="#"
+            <Link href="/trends"
+              onClick={toggleSideBar}
               className="w-full text-left p-2 hover:bg-gray-700 rounded cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              Metrics
+              Trends
             </Link>
           </li>
           <li>
             <Link href="#"
+              onClick={toggleSideBar}
               className="w-full text-left p-2 hover:bg-gray-700 rounded cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               Settings
