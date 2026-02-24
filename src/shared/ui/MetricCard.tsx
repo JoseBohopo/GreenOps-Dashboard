@@ -1,3 +1,5 @@
+import React, { ReactNode } from 'react';
+
 export interface MetricCardProps {
     title: string;
     subtitle?: string;
