@@ -1,3 +1,11 @@
+export interface MetricCardProps {
+    title: string;
+    subtitle?: string;
+    value: string | number;
+    icon?: ReactNode;
+    className?: string;
+}
+
 export const MetricCard: React.FC<MetricCardProps> = ({
   title,
   subtitle,
