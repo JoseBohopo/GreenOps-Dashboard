@@ -79,8 +79,11 @@ export const CsvUploader = () => {
   const hasInvalidRows = invalidRows && invalidRows.length > 0
 
   return (
-    <div className="mx-auto max-w-xs rounded-lg bg-white p-4 shadow-md sm:p-6 md:max-w-md lg:p-8">
-      <h2 className="mb-4 text-2xl font-bold text-gray-800">
+    <section
+      className="mx-auto max-w-md rounded-2xl bg-white p-6 shadow-lg border border-gray-100 flex flex-col items-center"
+      aria-labelledby="csv-uploader-title"
+    >
+      <h2 id="csv-uploader-title" className="mb-4 text-2xl font-extrabold text-blue-900 text-center tracking-tight">
         Load Usage Data CSV
       </h2>
 
@@ -111,30 +114,24 @@ export const CsvUploader = () => {
         />
       )}
 
-      <div className='flex gap-2'>
-
+      <div className="flex flex-col sm:flex-row gap-3 w-full mt-6">
         <button
           onClick={handleUpload}
           disabled={!selectedFile || !!fileError || isLoading}
-          className="w-full rounded-md bg-blue-600 px-4 py-2 font-semibold text-white
-            transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500
-            focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-gray-300"
+          className="w-full sm:w-1/2 rounded-xl bg-blue-700 px-4 py-3 font-semibold text-white text-base transition-colors hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-gray-300"
+          aria-label="Load selected CSV file"
         >
           {isLoading ? 'Parsing...' : 'Load File'}
         </button>
-
         <button
           onClick={clearData}
           disabled={!hasData || !!fileError || isLoading}
-          className="w-full rounded-md bg-red-600 px-4 py-2 font-semibold text-white
-            transition-colors hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-blue-500
-            focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-gray-300"
+          className="w-full sm:w-1/2 rounded-xl bg-red-600 px-4 py-3 font-semibold text-white text-base transition-colors hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-700 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-gray-300"
+          aria-label="Clear uploaded data"
         >
           Clear Data
         </button>
-
       </div>
-
-    </div>
+    </section>
   )
 }
