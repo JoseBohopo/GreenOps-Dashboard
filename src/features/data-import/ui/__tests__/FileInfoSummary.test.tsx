@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { FileInfoSummary } from '../FileInfoSummary';
+import { describe, expect, it } from 'vitest';
 
 describe('FileInfoSummary', () => {
   it('renders file name and size', () => {
