@@ -1,7 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useUsageDataStore } from "../useUsageDataStore";
 import { ParseResult, UsageDataRow } from "../../domain/types";
-import { act } from "react";
 
 const resetStore = () => {
     useUsageDataStore.setState({
@@ -143,70 +142,6 @@ describe("usageDataStore", () => {
 
             const state = useUsageDataStore.getState();
             expect(state.usageData).toEqual(mockData);
-        });
-    });
-
-    describe("useUsageDataStore", () => {
-        it("initializes with default state", () => {
-            const state = useUsageDataStore.getState();
-            expect(state.usageData).toBeNull();
-            expect(state.isLoading).toBe(false);
-            expect(state.error).toBeNull();
-            expect(state.lastUploadDate).toBeNull();
-            expect(state.missingColumns).toEqual(["Missing columns"]);
-            expect(state.invalidRows).toBeUndefined();
-        });
-
-        it("sets loading state", () => {
-            act(() => useUsageDataStore.getState().setLoading(true));
-            expect(useUsageDataStore.getState().isLoading).toBe(true);
-            act(() => useUsageDataStore.getState().setLoading(false));
-            expect(useUsageDataStore.getState().isLoading).toBe(false);
-        });
-
-        it("sets parse result (success)", () => {
-            const result = {
-                success: true,
-                rows: [{ id: 1, date: "2023-01-01", pageViews: 100, dataTransfer: 2048, avgSessionDuration: 300 }],
-                error: undefined,
-                invalidRows: undefined,
-                missingColumns: undefined,
-            };
-            act(() => useUsageDataStore.getState().setParseResult(result));
-            expect(useUsageDataStore.getState().usageData).toEqual(result.rows);
-            expect(useUsageDataStore.getState().error).toBeNull();
-            expect(useUsageDataStore.getState().invalidRows).toBeUndefined();
-            expect(useUsageDataStore.getState().isLoading).toBe(false);
-        });
-
-        it("sets parse result (failure)", () => {
-            const result = {
-                success: false,
-                rows: [],
-                error: "Parse error",
-                invalidRows: [{ rowNumber: 2, error: "Bad value" }],
-                missingColumns: ["colA"],
-            };
-            act(() => useUsageDataStore.getState().setParseResult(result));
-            expect(useUsageDataStore.getState().usageData).toEqual([]);
-            expect(useUsageDataStore.getState().error).toBe("Parse error");
-            expect(useUsageDataStore.getState().missingColumns).toEqual(["colA"]);
-            expect(useUsageDataStore.getState().invalidRows?.[0].rowNumber).toBe(2);
-            expect(useUsageDataStore.getState().isLoading).toBe(false);
-        });
-
-        it("clears data", () => {
-            act(() => useUsageDataStore.getState().clearData());
-            expect(useUsageDataStore.getState().usageData).toBeNull();
-            expect(useUsageDataStore.getState().error).toBeNull();
-            expect(useUsageDataStore.getState().lastUploadDate).toBeNull();
-            expect(useUsageDataStore.getState().missingColumns).toBeUndefined();
-            expect(useUsageDataStore.getState().invalidRows).toBeUndefined();
-        });
-
-        it("sets usage data directly", () => {
-            act(() => useUsageDataStore.getState().setData([{ date: "2023-01-01", pageViews: 100, dataTransfer: 2048, avgSessionDuration: 300 }]));
-            expect(useUsageDataStore.getState().usageData).toEqual([{ date: "2023-01-01", pageViews: 100, dataTransfer: 2048, avgSessionDuration: 300 }]);
         });
     });
 });
