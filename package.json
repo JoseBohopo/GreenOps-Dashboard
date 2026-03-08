@@ -13,7 +13,11 @@
     "test:coverage": "vitest --coverage"
   },
   "dependencies": {
+    "@tiptap/extension-placeholder": "^3.20.1",
+    "@tiptap/react": "^3.20.1",
+    "@tiptap/starter-kit": "^3.20.1",
     "next": "16.1.1",
+    "openai": "^6.27.0",
     "papaparse": "^5.5.3",
     "pnpm": "^10.26.2",
     "react": "19.2.3",
